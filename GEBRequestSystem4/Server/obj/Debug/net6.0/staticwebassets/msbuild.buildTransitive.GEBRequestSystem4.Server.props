@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\GEBRequestSystem4.Server.props" />
+</Project>

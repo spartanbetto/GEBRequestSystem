@@ -1,0 +1,64 @@
+﻿@page "/area"
+@page "/area/{IdBussinesArea:int}"
+@inject IBussinesAreaService BussinesAreaService
+
+@if (IdBussinesArea == null)
+{
+    <PageTitle>Crear Area</PageTitle>
+    <h3>Crear una nueva Area de Trabajo</h3>
+}
+else
+{
+    <PageTitle>Editar @area.NameBussinesArea</PageTitle>
+    <h3>Editar @area.NameBussinesArea</h3>
+}
+
+<EditForm Model="area" OnSubmit="HandleSubmit">
+    <div>
+        <label for="nameBussinesArea">Nombre</label>
+        <InputText id="nameBussinesArea" @bind-Value="area.NameBussinesArea" class="form-control"></InputText>
+    </div>
+    <div>
+        <label>Dirección de trabajo</label>
+        <InputSelect @bind-Value="area.IdBussinesDirection" class="form-select">
+            @foreach (var direction in BussinesAreaService.BussinesDirections)
+            {
+                <option value="@direction.IdBussinesDirection">@direction.NameBussinesDirection</option>
+            }
+        </InputSelect>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">@btnText</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int? IdBussinesArea { get; set; }
+
+    string btnText = string.Empty;
+
+    BussinesArea area = new BussinesArea { BussinesDirection = new BussinesDirection() };
+
+    protected override async Task OnInitializedAsync()
+    {
+        btnText = IdBussinesArea == null ? "Guardar Nueva Area" : "Actualizar Area";
+        await BussinesAreaService.GetBussinesDirections();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if(IdBussinesArea == null)
+        {
+            //Crear una nuava Area
+        }
+        else
+        {
+            area = await BussinesAreaService.GetSingleArea((int)IdBussinesArea);
+        }
+    }
+    async Task HandleSubmit()
+    {
+        
+    }
+
+}

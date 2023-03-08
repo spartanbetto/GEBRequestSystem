@@ -1,0 +1,41 @@
+﻿@page "/bussinesareas"
+@inject IBussinesAreaService BussinesAreaService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Areas de Trabajo</PageTitle>
+
+<h3>Areas de Trabajo</h3>
+
+<table class="table">
+    <thead class="table-dark">
+        <tr>
+            <th>Nombre</th>
+            <th>Direccion de Trabajo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var area in BussinesAreaService.BussinesAreas)
+        {
+            <tr>
+                <td>@area.NameBussinesArea</td>
+                <td>@area.BussinesDirection.NameBussinesDirection</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="(() => ShowArea(area.IdBussinesArea))"><i class="oi oi-pencil"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await BussinesAreaService.GetBussinesAreas();
+    }
+    void ShowArea(int IdBussinesArea)
+    {
+        NavigationManager.NavigateTo($"area/{IdBussinesArea}");
+    }
+}
